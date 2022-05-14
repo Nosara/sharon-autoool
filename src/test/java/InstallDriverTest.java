@@ -15,57 +15,72 @@ import java.util.List;
 public class InstallDriverTest {
         @Test
         public void chromeSession() throws IOException {
-//            var readFilesNames = new ReadFilesNames();
-//
-//            var names = readFilesNames.getFilesNames();
-//
-//            for (String name : names) {
-//                System.out.println(name);
-//            }
-//
-//
-//
-//            var responseList = Arrays.asList(
-//                    "1234", "PO-LUMINIC.INC-653",  "PO-LUMINIC.INC-653", "PO-LUMINIC.INC-653",
-//                    "3456", "PO-LUMINIC.INC-653",  "PO-LUMINIC.INC-653", "PO-LUMINIC.INC-653",
-//                    "7235", "NO HAY");
-//
-//            var writeResponse = new WriteResposeFile();
-//
-//            writeResponse.writeResponses(responseList);
+          /*  APPROACH TO FOLLOW
+                    1. Read files in order to get each of the Ids.
+                    2. Open chrome session in debugging mode.
+                    3. Create selenium automated session.
+                    4. Navigate to the page where the application is going to start the automated process.
+                    5. Build the functions to direct the process for each ID.
+                    6. Run the process for each id and collect the information.
+                    7. Write the information for each ID in the response.text.
+            */
 
-            //Session setup
+            //PASO 1: Read files in order to get each of the Ids.
+            var readFilesNames = new ReadFilesNames();
+            var names = readFilesNames.getFilesNames();
+
+            //PASO 2: Open chrome session in debugging mode.
+            ProcessBuilder builder = new ProcessBuilder(
+                    "cmd.exe", "/c", "chrome.exe --remote-debugging-port=9222");
+            builder.redirectErrorStream(true);
+            builder.start();
+
+            //PASO 3: Create selenium automated session.
             WebDriverManager.chromedriver().setup();
-
             WebDriver driver;
 
             ChromeOptions options = new ChromeOptions();
             options.setExperimentalOption("debuggerAddress", "127.0.0.1:9222");
 
             driver = new ChromeDriver(options);
-
-
             driver.switchTo().newWindow(WindowType.TAB);
 
             var actions = new BrowserActions(driver);
 
 
-            //Test
-            driver.get("https://google.com");
+            //PASO 4: Navigate to the page where the application is going to start the automated process.
+            driver.get("");
 
-            driver.getTitle(); // => "Google"
+            //PASO 5: Build the functions to direct the process for each ID.
 
-            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+            //PASO 6: Run the process for each id and collect the information.
 
-            WebElement searchBox = driver.findElement(By.name("q"));
+            //PASO 7: Write the information for each ID in the response.text.
+            var responseList = Arrays.asList(
+                    "1234", "PO-LUMINIC.INC-653",  "PO-LUMINIC.INC-653", "PO-LUMINIC.INC-653",
+                    "3456", "PO-LUMINIC.INC-653",  "PO-LUMINIC.INC-653", "PO-LUMINIC.INC-653",
+                    "7235", "NO HAY");
 
-            searchBox.sendKeys("Selenium");
-            actions.click(By.name("btnK"));
-//            searchButton.click();
+            var writeResponse = new WriteResposeFile();
 
-            searchBox = driver.findElement(By.name("q"));
-            searchBox.getAttribute("value"); // => "Selenium"
+            writeResponse.writeResponses(responseList);
 
-            driver.quit();
+//            //Test
+//            driver.get("https://google.com");
+//
+//            driver.getTitle(); // => "Google"
+//
+//            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+//
+//            WebElement searchBox = driver.findElement(By.name("q"));
+//
+//            searchBox.sendKeys("Selenium");
+//            actions.click(By.name("btnK"));
+////            searchButton.click();
+//
+//            searchBox = driver.findElement(By.name("q"));
+//            searchBox.getAttribute("value"); // => "Selenium"
+//
+//            driver.quit();
         }
 }
