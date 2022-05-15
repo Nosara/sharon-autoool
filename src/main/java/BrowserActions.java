@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -26,6 +27,12 @@ public class BrowserActions {
         waitForCondition(ExpectedConditions.not(ExpectedConditions.invisibilityOfElementLocated(by)))
                 .waitForCondition(ExpectedConditions.elementToBeClickable(by));
         waitForElement(by).click();
+        return this;
+    }
+
+    public BrowserActions clickWithJavascriptExecutor(By byElement){
+        JavascriptExecutor jse = (JavascriptExecutor) driver;
+        jse.executeScript("arguments[0].click();", driver.findElement(byElement));
         return this;
     }
 
