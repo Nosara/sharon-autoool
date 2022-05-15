@@ -49,9 +49,17 @@ public class InstallDriverTest {
 
 
             //PASO 4: Navigate to the page where the application is going to start the automated process.
-            driver.get("");
+            driver.get("http://bpms.dole.com/Metastorm/Default.aspx");
 
             //PASO 5: Build the functions to direct the process for each ID.
+
+            /*
+            * Input name para el id ctl00$phMainContent$CustomListPart$CustomListPart_Grid$ctl00$ctl02$ctl01$Filter_InvoiceNumber
+            *
+            * input filter para el id ctl00$phMainContent$CustomListPart$CustomListPart_Grid$ctl00$ctl02$ctl01$ctl16
+            *
+            * */
+
 
             //PASO 6: Run the process for each id and collect the information.
 
