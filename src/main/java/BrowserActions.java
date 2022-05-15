@@ -48,6 +48,13 @@ public class BrowserActions {
         return this;
     }
 
+    public String getText(WebElement e) {
+        if (e.getTagName().equalsIgnoreCase("input") || e.getTagName().equalsIgnoreCase("select"))
+            return e.getAttribute("value");
+        else
+            return e.getText();
+    }
+
     public BrowserActions setText(By by, CharSequence text) {
         waitForCondition(ExpectedConditions.not(ExpectedConditions.invisibilityOfElementLocated(by)))
                 .waitForCondition(ExpectedConditions.elementToBeClickable(by));
