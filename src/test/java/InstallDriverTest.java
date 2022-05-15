@@ -8,6 +8,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 public class InstallDriverTest {
@@ -39,7 +40,12 @@ public class InstallDriverTest {
             //PASO 5: Build the functions to direct the process for each ID.
             names.forEach(id ->
             {
-                searchId(actions, id);
+                try {
+                    searchId(actions, id);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                var a = 0;
             });
 //                actions.click(idInputFilterButton);
 //            driver.findElement(idInputFilterButton).sendKeys(org.openqa.selenium.Keys.ENTER);
@@ -107,9 +113,17 @@ public class InstallDriverTest {
             driver.getTitle().equals("OpenText MBPM");
         }
 
-        private void searchId(BrowserActions actions, String id){
+        private void searchId(BrowserActions actions, String id) throws InterruptedException {
             actions.setText(ByElements.idInput, id);
             actions.sendKeysToElement(ByElements.idInputFilterButton,org.openqa.selenium.Keys.ENTER );
             actions.clickWithJavascriptExecutor(By.xpath("/html/body/form/div[1]/ul/li[10]/a"));
+
+            Thread.sleep(4000);
+
+            var rows = actions.getDriver().findElements(ByElements.dataRows);
+        }
+
+        private List<String> getIdData(){
+            return null;
         }
 }

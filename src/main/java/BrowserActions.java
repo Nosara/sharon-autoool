@@ -16,6 +16,10 @@ import static org.junit.Assert.fail;
 public class BrowserActions {
     private WebDriver driver;
 
+    public WebDriver getDriver(){
+        return this.driver;
+    }
+
     private final int MAX_TIMEOUT = 30;
     private final int MAX_ATTEMPTS = 30;
 
