@@ -50,15 +50,15 @@ public class InstallDriverTest {
 
             //PASO 4: Navigate to the page where the application is going to start the automated process.
             driver.get("http://bpms.dole.com/Metastorm/Default.aspx");
+            driver.getTitle().equals("OpenText MBPM");
 
             //PASO 5: Build the functions to direct the process for each ID.
+                By idInput = By.name("ctl00$phMainContent$CustomListPart$CustomListPart_Grid$ctl00$ctl02$ctl01$Filter_InvoiceNumber");
+                By idInputFilterButton = By.name("ctl00$phMainContent$CustomListPart$CustomListPart_Grid$ctl00$ctl02$ctl01$ctl16");
 
-            /*
-            * Input name para el id ctl00$phMainContent$CustomListPart$CustomListPart_Grid$ctl00$ctl02$ctl01$Filter_InvoiceNumber
-            *
-            * input filter para el id ctl00$phMainContent$CustomListPart$CustomListPart_Grid$ctl00$ctl02$ctl01$ctl16
-            *
-            * */
+                actions.setText(idInput, names.stream().findAny().get());
+
+                actions.click(idInputFilterButton);
 
 
             //PASO 6: Run the process for each id and collect the information.
