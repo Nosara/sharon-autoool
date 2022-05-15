@@ -53,6 +53,14 @@ public class BrowserActions {
         return this;
     }
 
+    public BrowserActions sendKeysToElement(By by, CharSequence text) {
+        waitForCondition(ExpectedConditions.not(ExpectedConditions.invisibilityOfElementLocated(by)))
+                .waitForCondition(ExpectedConditions.elementToBeClickable(by));
+        WebElement element = waitForElement(by);
+        element.sendKeys(text);
+        return this;
+    }
+
     public BrowserActions waitForCondition(long timeOutInSeconds, long sleepInMillis, ExpectedCondition<?>... conditions) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOutInSeconds), Duration.ofMillis(sleepInMillis));
         Arrays.asList(conditions)

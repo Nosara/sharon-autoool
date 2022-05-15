@@ -2,16 +2,13 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.Select;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 public class InstallDriverTest {
         @Test
@@ -27,42 +24,28 @@ public class InstallDriverTest {
             */
 
             //PASO 1: Read files in order to get each of the Ids.
-            var readFilesNames = new ReadFilesNames();
-            var names = readFilesNames.getFilesNames();
+            var names = getIds();
 
             //PASO 2: Open chrome session in debugging mode.
-            ProcessBuilder builder = new ProcessBuilder(
-                    "cmd.exe", "/c", "chrome.exe --remote-debugging-port=9222");
-            builder.redirectErrorStream(true);
-            builder.start();
+            openChromeSession();
 
             //PASO 3: Create selenium automated session.
-            WebDriverManager.chromedriver().setup();
-            WebDriver driver;
-
-            ChromeOptions options = new ChromeOptions();
-            options.setExperimentalOption("debuggerAddress", "127.0.0.1:9222");
-
-            driver = new ChromeDriver(options);
-            driver.switchTo().newWindow(WindowType.TAB);
-
+            var driver = createSeleniumSession();
             var actions = new BrowserActions(driver);
 
-
             //PASO 4: Navigate to the page where the application is going to start the automated process.
-            driver.get("http://bpms.dole.com/Metastorm/Default.aspx");
-            driver.getTitle().equals("OpenText MBPM");
+            navigateToPage(driver);
 
             //PASO 5: Build the functions to direct the process for each ID.
-                By idInput = By.name("ctl00$phMainContent$CustomListPart$CustomListPart_Grid$ctl00$ctl02$ctl01$Filter_InvoiceNumber");
-                By idInputFilterButton = By.name("ctl00$phMainContent$CustomListPart$CustomListPart_Grid$ctl00$ctl02$ctl01$ctl16");
-
-                actions.setText(idInput, names.stream().findAny().get());
-
+            names.forEach(id ->
+            {
+                searchId(actions, id);
+            });
 //                actions.click(idInputFilterButton);
-            driver.findElement(idInputFilterButton).sendKeys(org.openqa.selenium.Keys.ENTER);
+//            driver.findElement(idInputFilterButton).sendKeys(org.openqa.selenium.Keys.ENTER);
+
             //add wait
-            actions.clickWithJavascriptExecutor(By.xpath("/html/body/form/div[1]/ul/li[10]/a"));
+
 
             //PASO 6: Run the process for each id and collect the information.
 
@@ -93,5 +76,40 @@ public class InstallDriverTest {
 //            searchBox.getAttribute("value"); // => "Selenium"
 //
 //            driver.quit();
+        }
+
+        private WebDriver createSeleniumSession(){
+            WebDriverManager.chromedriver().setup();
+            WebDriver driver;
+
+            ChromeOptions options = new ChromeOptions();
+            options.setExperimentalOption("debuggerAddress", "127.0.0.1:9222");
+
+            driver = new ChromeDriver(options);
+            driver.switchTo().newWindow(WindowType.TAB);
+            return driver;
+        }
+
+        private Set<String> getIds(){
+            var readFilesNames = new ReadFilesNames();
+            return readFilesNames.getFilesNames();
+        }
+
+        private void openChromeSession() throws IOException {
+            ProcessBuilder builder = new ProcessBuilder(
+                    "cmd.exe", "/c", "chrome.exe --remote-debugging-port=9222");
+            builder.redirectErrorStream(true);
+            builder.start();
+        }
+
+        private void navigateToPage(WebDriver driver){
+            driver.get("http://bpms.dole.com/Metastorm/Default.aspx");
+            driver.getTitle().equals("OpenText MBPM");
+        }
+
+        private void searchId(BrowserActions actions, String id){
+            actions.setText(ByElements.idInput, id);
+            actions.sendKeysToElement(ByElements.idInputFilterButton,org.openqa.selenium.Keys.ENTER );
+            actions.clickWithJavascriptExecutor(By.xpath("/html/body/form/div[1]/ul/li[10]/a"));
         }
 }
