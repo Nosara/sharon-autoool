@@ -61,14 +61,8 @@ public class InstallDriverTest {
 
 //                actions.click(idInputFilterButton);
             driver.findElement(idInputFilterButton).sendKeys(org.openqa.selenium.Keys.ENTER);
-
-            WebElement countryUL= driver.findElement(By.xpath("/html/body/form/div[1]/ul"));
-            List<WebElement> countriesList=countryUL.findElements(By.tagName("li"));
-            for (WebElement li : countriesList) {
-                if (li.getText().equals("Contains")) {
-                    li.submit();
-                }
-            }
+            //add wait
+            actions.clickWithJavascriptExecutor(By.xpath("/html/body/form/div[1]/ul/li[10]/a"));
 
             //PASO 6: Run the process for each id and collect the information.
 
