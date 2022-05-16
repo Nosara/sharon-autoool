@@ -1,7 +1,5 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
-import io.netty.util.internal.SystemPropertyUtil;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WindowType;
@@ -9,7 +7,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class InstallDriverTest {
@@ -20,7 +21,8 @@ public class InstallDriverTest {
             var names = getIds();
 
             System.out.println("STEP 2: Opening chrome session in debugging mode.");
-            openChromeSession();
+//            openChromeSession();
+//            Run this command : chrome.exe --remote-debugging-port=9222
 
             System.out.println("STEP 3: Creating selenium automated session.");
             var driver = createSeleniumSession();
