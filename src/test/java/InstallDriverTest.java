@@ -1,19 +1,19 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class InstallDriverTest {
         @Test
-        public void chromeSession() throws IOException {
+        public void chromeSession() throws IOException, InterruptedException {
           /*  APPROACH TO FOLLOW
                     1. Read files in order to get each of the Ids.
                     2. Open chrome session in debugging mode.
@@ -38,50 +38,26 @@ public class InstallDriverTest {
             navigateToPage(driver);
 
             //PASO 5: Build the functions to direct the process for each ID.
+            //PASO 6: Run the process for each id and collect the information.
+            var resultsList = new ArrayList<String>();
+
             names.forEach(id ->
             {
                 try {
-                    searchId(actions, id);
+                    resultsList.addAll(searchId(actions, id));
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                var a = 0;
             });
-//                actions.click(idInputFilterButton);
-//            driver.findElement(idInputFilterButton).sendKeys(org.openqa.selenium.Keys.ENTER);
 
-            //add wait
-
-
-            //PASO 6: Run the process for each id and collect the information.
+            Thread.sleep(4000);
 
             //PASO 7: Write the information for each ID in the response.text.
-            var responseList = Arrays.asList(
-                    "1234", "PO-LUMINIC.INC-653",  "PO-LUMINIC.INC-653", "PO-LUMINIC.INC-653",
-                    "3456", "PO-LUMINIC.INC-653",  "PO-LUMINIC.INC-653", "PO-LUMINIC.INC-653",
-                    "7235", "NO HAY");
-
             var writeResponse = new WriteResposeFile();
 
-            writeResponse.writeResponses(responseList);
+            writeResponse.writeResponses(resultsList);
 
-//            //Test
-//            driver.get("https://google.com");
-//
-//            driver.getTitle(); // => "Google"
-//
-//            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
-//
-//            WebElement searchBox = driver.findElement(By.name("q"));
-//
-//            searchBox.sendKeys("Selenium");
-//            actions.click(By.name("btnK"));
-////            searchButton.click();
-//
-//            searchBox = driver.findElement(By.name("q"));
-//            searchBox.getAttribute("value"); // => "Selenium"
-//
-//            driver.quit();
+        driver.quit();
         }
 
         private WebDriver createSeleniumSession(){
@@ -113,17 +89,41 @@ public class InstallDriverTest {
             driver.getTitle().equals("OpenText MBPM");
         }
 
-        private void searchId(BrowserActions actions, String id) throws InterruptedException {
+        private List<String> searchId(BrowserActions actions, String id) throws InterruptedException {
             actions.setText(ByElements.idInput, id);
-            actions.sendKeysToElement(ByElements.idInputFilterButton,org.openqa.selenium.Keys.ENTER );
+            actions.sendKeysToElement(ByElements.idInputFilterButton, Keys.ENTER );
             actions.clickWithJavascriptExecutor(By.xpath("/html/body/form/div[1]/ul/li[10]/a"));
 
             Thread.sleep(4000);
 
+            var data = new ArrayList<String>();
+
             var rows = actions.getDriver().findElements(ByElements.dataRows);
+
+            rows.forEach(r-> {
+                    var cells = r.findElements(By.xpath(".//td"));
+                    final String[] rowText = {""};
+                        cells.forEach(c-> {
+                            Optional<String> t = Optional.of(actions.getText(c));
+                           var text = t.isPresent() && (t.get().isBlank() || t.get().isEmpty())? "*" : t.get();
+                            rowText[0] = rowText[0] + text +"&";
+                                }
+                        );
+                        data.add(rowText[0]);
+                    });
+
+            return getIdData(id, data);
         }
 
-        private List<String> getIdData(){
-            return null;
+        private List<String> getIdData(String id, List<String> rowsText){
+            var response =  rowsText.stream().map(r ->{
+                       var e =  r.split("&");
+
+                       return e[0].equals("*")? "NO HAY, SORRY MAMASITA :C" : e[3]+" > "+e[6]+" > "+e[9]+" > "+e[11]+" > "+ e[13];
+                    }).collect(Collectors.toList());
+
+            response.add(0, id);
+
+            return response;
         }
 }
