@@ -20,6 +20,8 @@ public class InstallDriverTest {
             System.out.println("STEP 1: Reading files in order to get each of the Ids.");
             var names = getIds();
 
+            System.out.println("There are " + names.size() + " docs.");
+
             System.out.println("STEP 2: Opening chrome session in debugging mode.");
 //            openChromeSession();
 //            Run this command : chrome.exe --remote-debugging-port=9222
@@ -64,7 +66,7 @@ public class InstallDriverTest {
             return driver;
         }
 
-        private Set<String> getIds(){
+        private List<String> getIds(){
             var readFilesNames = new ReadFilesNames();
             return readFilesNames.getFilesNames();
         }
