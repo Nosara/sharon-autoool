@@ -42,15 +42,23 @@ public class InstallDriverTest {
                     resultsList.addAll(searchId(actions, id));
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
+                } finally {
+                    System.out.println("------- Saving data for: " + id);
+                    var writeResponse = new WriteResposeFile();
+                    try {
+                        writeResponse.writeResponses(resultsList);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             });
 
-            Thread.sleep(4000);
-
-            System.out.println("Step 6: Write the information for each ID in the response.text.");
-            var writeResponse = new WriteResposeFile();
-
-            writeResponse.writeResponses(resultsList);
+//            Thread.sleep(4000);
+//
+//            System.out.println("Step 6: Write the information for each ID in the response.text.");
+//            var writeResponse = new WriteResposeFile();
+//
+//            writeResponse.writeResponses(resultsList);
             driver.quit();
         }
 
@@ -84,7 +92,9 @@ public class InstallDriverTest {
         }
 
         private List<String> searchId(BrowserActions actions, String id) throws InterruptedException {
+            System.out.println("------- Searching ID: " + id);
             actions.setText(ByElements.idInput, id);
+            Thread.sleep(2000);
             actions.sendKeysToElement(ByElements.idInputFilterButton, Keys.ENTER );
             actions.clickWithJavascriptExecutor(ByElements.equalToOption);
 
@@ -117,6 +127,7 @@ public class InstallDriverTest {
                     }).collect(Collectors.toList());
 
             response.add(0, id);
+            response.add(" ");
 
             return response;
         }

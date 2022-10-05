@@ -6,7 +6,9 @@ public class WriteResposeFile {
     public void writeResponses(List<String> responses) throws IOException {
         StringBuilder response = new StringBuilder();
 
-        responses.forEach(r -> response.append(r).append(System.lineSeparator()));
+        responses.forEach(r ->{
+            response.append(r).append(System.lineSeparator());
+        } );
 
         writeFile(response.toString());
     }
