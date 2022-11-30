@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -98,7 +99,9 @@ public class InstallDriverTest {
             actions.sendKeysToElement(ByElements.idInputFilterButton, Keys.ENTER );
             actions.clickWithJavascriptExecutor(ByElements.equalToOption);
 
-            Thread.sleep(4000);
+            Thread.sleep(1000);
+
+            actions.waitForCondition(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(ByElements.loader)));
 
             var data = new ArrayList<String>();
 

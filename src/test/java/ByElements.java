@@ -22,4 +22,9 @@ public class ByElements {
             By.xpath(
                     "/html/body/form/div[1]/ul/li[10]/a"
             );
+
+    public static By loader =
+            By.xpath(
+                    "//*[@id=\"progressDiv\"]"
+            );
 }
