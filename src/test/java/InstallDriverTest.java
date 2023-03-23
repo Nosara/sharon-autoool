@@ -18,14 +18,17 @@ public class InstallDriverTest {
         @Test
         public void chromeSession() throws IOException, InterruptedException {
 
+            System.setProperty("webdriver.http.factory", "jdk-http-client");
+
             System.out.println("STEP 1: Reading files in order to get each of the Ids.");
+
             var names = getIds();
 
             System.out.println("There are " + names.size() + " docs.");
 
             System.out.println("STEP 2: Opening chrome session in debugging mode.");
 //            openChromeSession();
-//            Run this command : chrome.exe --remote-debugging-port=9222
+//            Run this command : chrome.exe --remote-debugging-port=9222 --remote-allow-origins=*
 
             System.out.println("STEP 3: Creating selenium automated session.");
             var driver = createSeleniumSession();
@@ -88,7 +91,7 @@ public class InstallDriverTest {
         }
 
         private void navigateToPage(WebDriver driver){
-            driver.get("http://bpms.dole.com/Metastorm/Default.aspx");
+            driver.get("https://bpms.dole.com/Metastorm/Default.aspx");
             driver.getTitle().equals("OpenText MBPM");
         }
 
