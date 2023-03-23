@@ -12,7 +12,7 @@ public class ByElements {
 
     public static By dataRows =
             By.xpath(
-                    "/html/body/form/div[2]/div[3]/div/div/div/div[2]/div[1]/table/tbody/tr[1]/td/div/table/tbody/tr"
+                    "/html/body/form/div[2]/div[3]/div/div/div/div[2]/div[1]/table/tbody/tr[1]/td/div/div/table/tbody/tr"
             );
 
     public static By td =
